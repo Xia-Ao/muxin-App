@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<!-- <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_945062_6uk6av8zzsf.css"> -->
+		<link rel="stylesheet" type="text/css" href="iconfont/iconfont.css">
+		<link rel="stylesheet" type="text/css" href="css/header.css">
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+
+			mui.plusReady(function() {
+				plus.navigator.setStatusBarBackground("#222222");
+				plus.navigator.setStatusBarStyle("light")
+			})
+		</script>
+	</head>
+	<body>
+
+		<header class="mui-bar mui-bar-nav title">
+			<h1 class="mui-title title-color">微信</h1>
+		</header>
+
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" tabindex="0">
+				<span class="mui-icon mui-icon-weixin"></span>
+				<span class="mui-tab-label">微信</span>
+			</a>
+			<a class="mui-tab-item" tabindex="1">
+				<span class="mui-icon iconfont icon-tongxunlu"></span>
+				<span class="mui-tab-label">通讯录</span>
+			</a>
+			<a class="mui-tab-item" tabindex="2">
+				<span class="mui-icon iconfont icon-faxianzhinanzhen"></span>
+				<span class="mui-tab-label">发现</span>
+			</a>
+			<a class="mui-tab-item" tabindex="3">
+				<span class="mui-icon iconfont icon-wode"></span>
+				<span class="mui-tab-label">我</span>
+			</a>
+		</nav>
+
+		<script type="application/javascript">
+			console.log('执行index');
+		
+			var pageArray = [{
+					pageId: 'wechat-list.html',
+					pageUrl: 'wechat-list.html'
+				},
+				{
+					pageId: 'wechat-contact.html',
+					pageUrl: 'wechat-contact.html'
+				}, {
+					pageId: 'wechat-discover.html',
+					pageUrl: 'wechat-discover.html'
+				}, {
+					pageId: 'wechat-me.html',
+					pageUrl: 'wechat-me.html'
+				},
+			];
+
+
+			var pageStyle = {
+				top: '44px',
+				bottom: '50px'
+			};
+
+			mui.plusReady(function() {
+
+				// 禁止返回到登录注册页面
+				mui.back = function() {
+					return false;
+				}
+
+				// 获取当前页面的webview
+				var currentWebView = plus.webview.currentWebview();
+
+				// 向当前的主页webview追加子页的4张webview对象
+				for (var i = 0; i < pageArray.length; i++) {
+					var page = plus.webview.create(pageArray[i].pageUrl, pageArray[i].pageId, pageStyle);
+
+					// 隐藏所有页面
+					page.hide();
+					// 向webview中添加子页面
+					currentWebView.append(page);
+				}
+
+				// 显示默认页面
+				console.log('默认显示页面1', pageArray[0].pageId);
+				plus.webview.show(pageArray[0].pageId);
+
+				// 批量绑定tap事件，展示不同的页面
+				mui(".mui-bar-tab").on('tap', 'a', function() {
+					var tabIndex = this.getAttribute("tabindex");
+
+					// 显示当前点击的页面
+					plus.webview.show(pageArray[tabIndex].pageId, "fade-in", 200);
+					// 隐藏其他的页面
+					for (var i = 0; i < pageArray.length; i++) {
+						if (tabIndex != i) {
+							plus.webview.hide(pageArray[i].pageId, "fade-out", 200);
+						}
+					}
+
+				});
+				console.log('默认显示页面2', pageArray[0].pageId);
+				setTimeout('initData()','500');
+			});
+
+			function initData() {
+				var wechatList = plus.webview.getWebviewById("wechat-list.html");
+				mui.fire(wechatList, "refresh");
+
+				var wechatme = plus.webview.getWebviewById("wechat-me.html");
+				mui.fire(wechatme, "refresh");
+			}
+		</script>
+
+	</body>
+</html>

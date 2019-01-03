@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/header.css" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<a id="openMenu" class="mui-icon mui-icon mui-icon-more mui-pull-right" style="color: white; "></a>
+			<h1 class="mui-title title-color">我的头像</h1>
+		</header>
+
+		<div class="mui-content">
+			<img id="imgMyface" src="">
+		</div>
+
+		<div id="imgMenu" class="mui-popover mui-popover-bottom mui-popover-action ">
+			<!-- 可选择菜单 -->
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a id="upLoadImgBtn" href="#">上传头像</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="saveImageBtn" href="#">保存图片</a>
+				</li>
+			</ul>
+			<!-- 取消菜单 -->
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a href="#imgMenu"><b>取消</b></a>
+				</li>
+			</ul>
+		</div>
+
+
+		<script src="../js/mui.js"></script>
+		<script src="../js/app.js"></script>
+		<script type="text/javascript">
+			mui.init()
+
+			mui.plusReady(function() {
+
+				// 规定头像图片高度自适应
+				var width = document.body.clientWidth;
+				imgMyface = document.getElementById('imgMyface');
+				imgMyface.width = width;
+				imgMyface.height = width;
+
+				refreshUserInfo();
+
+				// 添加自定义事件，刷新头像
+				window.addEventListener("refresh", function() {
+					refreshUserInfo();
+				});
+
+				// 打开菜单
+				var openMenu = document.getElementById('openMenu');
+				openMenu.addEventListener('tap', function() {
+					mui('#imgMenu').popover('toggle')
+				})
+
+				// 绑定选择照片按钮事件
+				var upLoadImgBtn = document.getElementById('upLoadImgBtn');
+				upLoadImgBtn.addEventListener('tap', function() {
+					mui.openWindow({
+						url: '../plugin/cropper/myface-uploader.html',
+						id: 'myface-uploader.html',
+						createNew: true
+					});
+				})
+
+
+				// 绑定保存照片的菜单按钮
+				var saveImageBtn = document.getElementById('saveImageBtn');
+				saveImageBtn.addEventListener('tap', function() {
+
+					plus.nativeUI.showWaiting('下载中...');
+
+					var user = app.getUserGlobalInfo();
+					var url = app.imgUrl + user.faceImageBig;
+					var dtask = plus.downloader.createDownload(url, {}, function(downloadFile, status) {
+						// 下载完成
+						plus.nativeUI.closeWaiting();
+						if (status == 200) {
+							plus.gallery.save(downloadFile.filename,function(){
+								app.showToast('照片保存成功！', 'success');
+							})
+						} else {
+							app.showToast('照片保存失败！', 'error');
+						}
+					});
+				
+					dtask.start(); 	// 启动下载任务!
+
+				})
+			})
+			// 刷新用户头像
+			function refreshUserInfo() {
+				var userInfo = app.getUserGlobalInfo();
+				if (userInfo.faceImageBig) {
+					imgMyface.src = app.imgUrl + userInfo.faceImageBig;
+				}
+			}
+		</script>
+	</body>
+
+</html>

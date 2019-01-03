@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<div class="mui-content">
+
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-media">
+					<a id="friendCircle" href="javascript:;">
+						<img class="mui-media-object mui-pull-left" src="image/friends.png" style="max-width: 24px; height: 24px;">
+						<p class="mui-ellipsis" style="line-height: 24px; color: #000000;font-size: 16px;">
+							<span style="margin-left: 10px;">朋友圈</span>
+						</p>
+					</a>
+				</li>
+
+			</ul>
+
+			<br>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-media">
+					<a id="addFriendLink" href="javascript:;">
+						<img class="mui-media-object mui-pull-left" src="image/addfriends.png" style="max-width: 24px; height: 24px;">
+						<p class="mui-ellipsis" style="line-height: 24px; color: #000000;font-size: 16px;">
+							<span style="margin-left: 10px;">添加好友</span>
+						</p>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a id="scanIt" href="javascript:;">
+						<img class="mui-media-object mui-pull-left" src="image/scanscan.png" style="max-width: 24px; height: 24px;">
+						<p class="mui-ellipsis" style="line-height: 24px; color: #000000;font-size: 16px;">
+							<span style="margin-left: 10px;">扫一扫</span>
+						</p>
+					</a>
+				</li>
+
+			</ul>
+		</div>
+
+		<script src="js/mui.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function() {
+
+				// 添加绑定事件 - 添加好友
+				var addFriendLink = document.getElementById('addFriendLink');
+				addFriendLink.addEventListener('tap', function() {
+					mui.openWindow('view/searchFriend.html','searchFriend.html')
+				})
+
+				// 添加绑定事件 - 扫一扫
+				var scanIt = document.getElementById('scanIt');
+				scanIt.addEventListener('tap', function() {
+					mui.openWindow('view/scan.html','scan.html');
+				})
+
+				// 添加绑定事件 - 朋友圈
+				var friendCircle = document.getElementById('friendCircle');
+				friendCircle.addEventListener('tap', function() {
+
+				})
+
+			})
+		</script>
+	</body>
+
+</html>

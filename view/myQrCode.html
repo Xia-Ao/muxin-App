@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/header.css" />
+		<style type="text/css">
+			.mui-bar-nav {
+				box-shadow: none
+			}
+
+			.qr-content {
+				width: 100%;
+				position: absolute;
+				top: 44px;
+				bottom: 0px;
+				background: #2e3132;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<a id="saveImageBtn" class="mui-icon mui-icon  mui-icon-download mui-pull-right" style="color: white; "></a>
+			<h1 class="mui-title title-color">我的二维码</h1>
+		</header>
+
+		<div class="mui-content qr-content">
+			<div id="img-content" style="background: white; margin: 0 5%; border-radius: 2px;  padding: 20px;">
+				<div>
+					<img id="myface" src="" width="60" style=" float: left;">
+					<label id="nickName" style="color: #333; margin-left: 20px;  position:relative; top:20px;"></label>
+				</div>
+				<div style="text-align: center;">
+					<img src="" id="qrcodeImg" style="">
+				</div>
+				<div style="text-align: center;">
+					<span style="color: #333; font-size: 12px;">扫一扫上面的二维码图案，加我微信</span>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="mui-content">
+			<img id="qrCode" src="">
+		</div>
+
+
+		<script src="../js/mui.js"></script>
+		<script src="../js/app.js"></script>
+		<script type="text/javascript">
+			mui.init()
+
+			mui.plusReady(function() {
+				var myface = document.getElementById('myface');
+				var nickName = document.getElementById('nickName');
+				var qrcodeImg = document.getElementById('qrcodeImg');
+
+				var user = app.getUserGlobalInfo();
+
+				nickName.innerHTML = user.nickname;
+				myface.src = app.imgUrl + user.faceImage;
+				qrcodeImg.src = app.imgUrl + user.qrcode;
+
+				var imgWidth = document.getElementById('img-content').clientWidth - 40;
+
+				qrcodeImg.width = imgWidth;
+				qrcodeImg.height = imgWidth;
+
+				// 绑定保存照片的菜单按钮
+				var saveImageBtn = document.getElementById('saveImageBtn');
+				saveImageBtn.addEventListener('tap', function() {
+
+					plus.nativeUI.showWaiting('下载中...');
+
+					var user = app.getUserGlobalInfo();
+					var url = app.imgUrl + user.qrcode;
+					var dtask = plus.downloader.createDownload(url, {}, function(downloadFile, status) {
+						// 下载完成
+						plus.nativeUI.closeWaiting();
+						if (status == 200) {
+							plus.gallery.save(downloadFile.filename, function() {
+								app.showToast('照片保存成功！', 'success');
+							})
+						} else {
+							app.showToast('照片保存失败！', 'error');
+						}
+					});
+
+					dtask.start(); // 启动下载任务!
+
+				})
+
+
+
+			})
+		</script>
+	</body>
+
+</html>

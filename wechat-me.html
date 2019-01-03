@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-media">
+					<a id="userFaceImage" href="javascript:;">
+						<span class="mui-pull-right mui-icon mui-icon-arrowright" style="line-height: 42px; color: lightgray; margin-left: 3px;"></span>
+						<img id="userImage" class="mui-media-object mui-pull-right" src="">
+						<div class="mui-media-body" style="line-height: 42px; font-size: 16px;">
+							头像
+						</div>
+					</a>
+				</li>
+
+				<li class="mui-table-view-cell mui-media">
+					<a id="linkNickName" href="javascript:;">
+						<span class="mui-pull-right mui-icon mui-icon-arrowright" style="color: lightgray; margin-left: 3px;"></span>
+						<span id="nickName" class="mui-pull-right" style="color: gray; font-size: 14px; ">昵称</span>
+						<div class="mui-media-body">
+							昵称
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a href="javascript:;">
+						<span id="userName" class="mui-pull-right" style="color: gray; font-size: 14px; margin-right: 25px; ">账号</span>
+						<div class="mui-media-body">
+							账号
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a id="myQrCode" href="javascript:;">
+						<span class="mui-pull-right mui-icon mui-icon-arrowright" style="color: lightgray; margin-left: 3px;"></span>
+						<img class="mui-media-object mui-pull-right" src="image/qrcode.png" style="max-width: 20px; height: 20px;">
+						<div class="mui-media-body">
+							我的二维码
+						</div>
+					</a>
+				</li>
+
+
+			</ul>
+			<br>
+
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" style="text-align: center;">
+					<a id="loginOut" class="">
+						退出登录
+					</a>
+				</li>
+
+			</ul>
+		</div>
+
+
+
+		<script src="js/mui.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+		<script type="text/javascript">
+			mui.init()
+
+			mui.plusReady(function() {
+				// 获取当前webView ,刷新用户信息
+				var meWebView = plus.webview.currentWebview();
+				meWebView.addEventListener('show', function() {
+					console.log('刷新我的页面')
+					refreshUserInfo();
+				})
+
+
+
+				// 页面跳转- 我的头像
+				var userImage = document.getElementById('userFaceImage');
+				userImage.addEventListener('tap', function() {
+					mui.openWindow('view/myface.html', 'myface.html');
+				})
+
+				// 页面跳转- 修改昵称
+				var linkNickName = document.getElementById('linkNickName');
+				linkNickName.addEventListener('tap', function() {
+					mui.openWindow('view/myNickName.html', 'myNickName.html');
+				})
+
+				// 页面跳转- 我的二维码
+				var myQrCode = document.getElementById('myQrCode');
+				myQrCode.addEventListener('tap', function() {
+					mui.openWindow('view/myQrCode.html', 'myQrCodes.html');
+				})
+
+				// 添加自定义事件，刷新头像
+				window.addEventListener("refresh", function() {
+					refreshUserInfo();
+				});
+
+				// 添加自定义事件，退出登录
+				var loginOut= document.getElementById('loginOut')
+				loginOut.addEventListener('tap', function() {
+					app.loginOut();
+					mui.back();
+					mui.openWindow('login.html','login.html')
+				});
+
+				// 获取并刷新用户信息
+				function refreshUserInfo() {
+					var userInfo = app.getUserGlobalInfo();
+					console.log(JSON.stringify(userInfo));
+
+					if (userInfo !== null) {
+						// 获取对应html节点
+						var userName = document.getElementById('userName');
+						var userImage = document.getElementById('userImage');
+						var nickName = document.getElementById('nickName');
+
+						userName.innerHTML = userInfo.username;
+						nickName.innerHTML = userInfo.nickname;
+
+						if (userInfo.faceImage) {
+							userImage.src = app.imgUrl + userInfo.faceImage;
+							console.log(userImage.src);
+						}
+
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

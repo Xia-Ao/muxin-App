@@ -1,0 +1,19 @@
+* {
+	touch-action: none;
+}
+
+.title {
+	background-color: #222222;
+}
+
+.title-color {
+	color: white;
+}
+
+.mui-bar-tab .mui-tab-item.mui-active {
+	color: #2AC845;
+}
+
+.mui-bar-nav {
+	box-shadow: none
+}
