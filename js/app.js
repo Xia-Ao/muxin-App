@@ -1,12 +1,14 @@
 window.app = {
 	// 接口服务地址
-	baseUrl: 'http://e22n907181.imwork.net',
+	// baseUrl: 'http://e22n907181.imwork.net',
+	baseUrl: '35.200.14.97:8080/wechat',
 
 	// 图片度服务器地址
 	imgUrl: 'http://35.200.14.97:88/group1/',
 
 	// neety websocket服务地址
-	nettyServerUrl: 'ws://e22n907181.imwork.net:57830/ws',
+	// nettyServerUrl: 'ws://e22n907181.imwork.net:57830/ws',
+	nettyServerUrl: 'ws:35.200.14.97:8088/ws',
 
 	// 判断字符串是否为空
 	isNotNull: function(str) {
